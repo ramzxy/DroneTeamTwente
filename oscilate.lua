@@ -15,7 +15,7 @@ local start_time = 0
 local sweep_complete = false
 
 function update()
-  local sw = rc:get_pwm(CH_SWITCH) or 1500 -- default to 1500 if no switch is found
+  local sw = RC:get_pwm(CH_SWITCH) or 1500
   if sw > 1700 then
     if not active then
       gcs:send_text(0, string.format("Frequency sweep starting: %.1f Hz to %.1f Hz over %.0f sec", FREQ_START, FREQ_END, SWEEP_TIME))
@@ -29,6 +29,7 @@ function update()
       if not current_time then
         return update, PERIOD_MS
       end
+      current_time = tonumber(current_time)
       
       local elapsed = (current_time / 1000.0) - start_time
       local freq = FREQ_START + (FREQ_END - FREQ_START) * (elapsed / SWEEP_TIME)
