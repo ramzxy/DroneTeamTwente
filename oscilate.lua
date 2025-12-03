@@ -20,18 +20,14 @@ function update()
     if not active then
       gcs:send_text(0, string.format("Frequency sweep starting: %.1f Hz to %.1f Hz over %.0f sec", FREQ_START, FREQ_END, SWEEP_TIME))
       active = true
-      start_time = millis() / 1000.0
+      start_time = millis():tofloat()
       sweep_complete = false
     end
     
     if not sweep_complete then
-      local current_time = millis()
-      if not current_time then
-        return update, PERIOD_MS
-      end
-      current_time = tonumber(current_time)
+      local current_time = millis():tofloat()
       
-      local elapsed = (current_time / 1000.0) - start_time
+      local elapsed = (current_time - start_time) / 1000.0
       local freq = FREQ_START + (FREQ_END - FREQ_START) * (elapsed / SWEEP_TIME)
       
       if freq >= FREQ_END then
